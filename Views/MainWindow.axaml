@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Minecraft_Mod_Solver.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="600"
+        x:Class="Minecraft_Mod_Solver.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Minecraft Mod Solver"
+        Width="850" Height="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto, *, Auto" Margin="20">
+        
+        <!-- CABEÇALHO -->
+        <StackPanel Grid.Row="0" Spacing="15" Margin="0,0,0,15">
+            <TextBlock Text="Verificador de Mods (Client / Server)" FontSize="24" FontWeight="Bold"/>
+            
+            <Grid ColumnDefinitions="*, Auto">
+                <TextBox Grid.Column="0" Text="{Binding SelectedFolderPath}" Watermark="Selecione a pasta dos mods..." VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Content="Procurar Pasta..." Click="ProcurarPasta_Click" Margin="10,0,0,0" Padding="15,8"/>
+            </Grid>
+
+            <!-- Configurações de API -->
+            <Grid ColumnDefinitions="Auto, *, Auto, Auto" Margin="0,5,0,0">
+                <TextBlock Grid.Column="0" Text="CurseForge API Key:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox Grid.Column="1" Text="{Binding CurseForgeApiKey}" PasswordChar="•" PlaceholderText="Chave opcional salva no cache do sistema"/>
+                <Button Grid.Column="2" Content="Salvar" Command="{Binding SaveConfigCommand}" Margin="10,0,0,0"/>
+                <Button Grid.Column="3" Content="Testar API" Command="{Binding TestApiCommand}" Margin="10,0,0,0"/>
+            </Grid>
+            
+            <!-- Status de Conexão -->
+            <TextBlock Text="{Binding ApiStatusLabel}" FontSize="12" Foreground="Gray" HorizontalAlignment="Right"/>
+        </StackPanel>
+
+        <!-- CORPO: Lista de Mods Dinâmica -->
+        <DataGrid Grid.Row="1" ItemsSource="{Binding ModFiles}" AutoGenerateColumns="False" 
+                  IsReadOnly="True" GridLinesVisibility="All" BorderThickness="1" BorderBrush="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Arquivo (.jar)" Binding="{Binding FileName}" Width="*"/>
+                <DataGridTextColumn Header="Status de Avaliação" Binding="{Binding Status}" Width="160"/>
+                <DataGridTextColumn Header="Fonte de Dados" Binding="{Binding ApiSource}" Width="140"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- RODAPÉ: Status Ativo e Execução -->
+        <StackPanel Grid.Row="2" Margin="0,15,0,0" Spacing="8">
+            <TextBlock Text="{Binding CurrentStatusLabel}" FontWeight="SemiBold" Foreground="#3498db" HorizontalAlignment="Center"/>
+            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsProcessing}" Height="5"/>
+            <Button Content="Verificar e Organizar Mods" Command="{Binding VerifyModsCommand}" 
+                    IsEnabled="{Binding !IsProcessing}"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" 
+                    Padding="12" Background="#28a745" Foreground="White" FontSize="16" FontWeight="Bold"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>
