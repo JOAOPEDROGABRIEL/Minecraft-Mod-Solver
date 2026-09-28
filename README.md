@@ -57,3 +57,6 @@ Como obter e usar a chave:
     Pronto! O aplicativo criará uma subpasta chamada modVerifier Files dentro do seu diretório original, contendo todos os mods perfeitamente separados e prontos para uso no seu servidor.
 
 Desenvolvido para facilitar a vida de donos de servidores e criadores de modpacks. ☕🧊
+
+
+⚖️ Licença: Este projeto está sob a licença GNU GPLv3.
